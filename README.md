@@ -22,7 +22,7 @@ ptyhon -m venv vevn && venv\Scritps\activate
 pip install -r req.txt
 ```
 
-Запуск проекта:
+## Запуск проекта:
 ```
 python main.py
 ```
