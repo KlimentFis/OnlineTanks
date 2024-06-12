@@ -1,14 +1,11 @@
-from random import randint
 import pygame
-
-concentration_level = 60
 
 class Mine_Field():
     def __init__(self, app):
         # self.mins = [Mins(app, i, j) for i in range(9)  for j in range(9) if randint(0, 10)== 1 and (i, j) != (0, 0)]
         self.mins = []
         self.tank = Tank(app)
-        self.enemy_tank = Enemy(app)
+        self.enemy_tank = Tank(app)
         self.enemy_tank.elements = [
         (1, 1, (64, 3, 3)), (2, 1, (64, 3, 3)), (3, 1, (64, 3, 3)), (4, 1, (64, 3, 3)), (5, 1, (64, 3, 3)), (6, 1, (64, 3, 3)), (7, 1, (64, 3, 3)), (1, 2, (64, 3, 3)), 
         (2, 2, (64, 3, 3)), (3, 2, (64, 3, 3)), (4, 2, (64, 3, 3)), (5, 2, (64, 3, 3)), (6, 2, (64, 3, 3)), (7, 2, (64, 3, 3)), (1, 6, (64, 3, 3)), (2, 6, (64, 3, 3)), 
@@ -19,7 +16,7 @@ class Mine_Field():
         self.enemy_tank.y = 36
 
     def update(self, app):
-        self.enemy_tank.update(app, self.tank)
+        # self.enemy_tank.update(app, self.tank)
         if self.tank.health <= 0:
             print("Танк взорван!")
             app.GameOver = True
@@ -59,7 +56,7 @@ class Mine_Field():
         self.enemy_tank.draw(app)
 
 class Mins():
-    def __init__(self, app, x, y):
+    def __init__(self, x, y):
         self.x = x * 8
         self.y = y  * 8
         self.elements = [
@@ -168,74 +165,8 @@ class Tank():
     def get_cord(self, app):
         return [((x+ self.x) * app.cell_size, (y+self.y) * app.cell_size) for x, y, _ in self.elements]
 
-
 class Enemy(Tank):
-
-    # def rotate(self):
-    
-    def update(self, app, enemy):
-        my_cord = (self.x, self.y)
-        enemy_cord = (enemy.x, enemy.y)
-        if not my_cord == enemy_cord:
-            # if my_cord[0] == enemy_cord[0] or my_cord[1] == enemy_cord[1]:
-            #     # if my_cord[0] == enemy_cord[0] and my_cord[1] < enemy_cord[1]:
-            #     #     self.dx = 0
-            #     #     self.dy = 1
-            #     # elif my_cord[0] == enemy_cord[0] and my_cord[1] > enemy_cord[1]:
-            #     #     self.dx = 0
-            #     #     self.dy = -1
-            #     # elif my_cord[1] == enemy_cord[1] and my_cord[0] < enemy_cord[0]:
-            #     #     self.dx = 1
-            #     #     self.dy = 0
-            #     # elif my_cord[1] == enemy_cord[1] and my_cord[0] > enemy_cord[0]:
-            #     #     self.dx = -1
-            #     #     self.dy = 0
-            #     pass
-            #     # self.shot()
-            # else:
-            #     if abs(my_cord[0] - enemy_cord[0]) < abs(my_cord[1] - enemy_cord[1]):
-            #         if my_cord[0] > enemy_cord[0]:
-            #             self.dx = -1
-            #             self.dy = 0
-            #             # self.move(app, 1)
-            #             pass
-            #         else:
-            #             self.dx = 1
-            #             self.dy = 0
-            #             # self.move(app, 1)
-            #             pass
-            #     else:
-            #         if my_cord[1] > enemy_cord[1]:
-            #             self.dx = 0
-            #             self.dy = -1
-            #             # self.move(app, 1)
-            #             pass
-            #         else:
-            #             self.dx = 0
-            #             self.dy = 1
-            #             # self.move(app, 1)
-            #             pass
-            new_dx = my_cord[0] - enemy_cord[0] 
-            new_dy = my_cord[1] - enemy_cord[1]
-            if abs(new_dx) < abs(new_dy):
-                if new_dx > 0:
-                    while not self.dx == -1 and self.dy == 0:
-                        self.rotate(1)
-                else:
-                    while not self.dx == 1 and self.dy == 0:
-                        self.rotate(1)
-            else:
-                if new_dy > 0:
-                    while not self.dx == 0 and self.dy == -1:
-                        self.rotate(1)
-                else:
-                    while not self.dx == 0 and self.dy == 1:
-                        self.rotate(1)
-
-
-        else:
-            pass
-
+    ...
 
 class Bullet():
     def __init__(self, x, y, dx, dy):
@@ -296,19 +227,11 @@ class App():
                         pygame.display.update()
                     pygame.time.wait(5000)
                     break
-            # print(get("http://127.0.0.1:2336/concentration").json()['concentration'])
-            # concentration = get("http://127.0.0.1:2336/concentration").json()['concentration']
-            concentration = "100"
-            pygame.display.set_caption(str(concentration))
+
+
             self.clock.tick(15)
             self.display.fill(pygame.Color("black"))
             [pygame.draw.rect(self.display, (220, 220, 220), (x * 8 * self.cell_size, y * 8 * self.cell_size, self.cell_size, self.cell_size), 0) for x in range(11) for y in range(11)]
-            # if int(concentration) >= concentration_level:
-            #     [pygame.draw.rect(self.display, (0, 255, 0), (800, 655 - int(concentration) * 5, self.cell_size, 5 * int(concentration)))]
-            # elif int(concentration) >= concentration_level // 2:
-            #     [pygame.draw.rect(self.display, (255, 255, 0), (800, 655 - int(concentration) * 5, self.cell_size, 5 * int(concentration)))]
-            # else:
-            #     [pygame.draw.rect(self.display, (255, 0, 0), (800, 655 - int(concentration) * 5, self.cell_size, 5 * int(concentration)))]
             field.update(self)
             field.draw(self)
             pygame.display.update()
@@ -320,30 +243,20 @@ class App():
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        # if int(concentration) >= concentration_level:
                         direction = 1
                         pressed = True
                     if event.key == pygame.K_DOWN:
-                        # if int(concentration) >= concentration_level:
                         direction = -1
                         pressed = True
                     if event.key == pygame.K_LEFT:
-                        # if int(concentration) >= concentration_level:
                         field.tank.rotate(-1)
                     if event.key == pygame.K_RIGHT:
-                        # if int(concentration) >= concentration_level:
                         field.tank.rotate(1)
                     if event.key == pygame.K_SPACE:
-                        # if int(concentration) >= concentration_level:
                         field.tank.shot()
                             # pygame.mixer.music.unload()
                             # pygame.mixer.music.load("tank-firin.mp3")
                             # pygame.mixer.music.play(loops=0, start=0.0)
-                    if event.key == pygame.K_w:
-                        if int(concentration) >= concentration_level:
-                            # print(field.tank.dx, field.tank.dy)
-                            # print(field.tank.x, field.tank.y)
-                            print(field.enemy_tank.dx, field.enemy_tank.dy)
 
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_UP:
