@@ -23,8 +23,10 @@ pip install -r req.txt
 ```
 
 ## Запуск проекта:
+
+Запуск API:
 ```
-python main.py
+uvicorn api:app --reload
 ```
 
 ## Заключение
